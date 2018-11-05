@@ -9,13 +9,13 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import org.eclipse.persistence.oxm.annotations.XmlVariableNode;
 
 
-public class MapAdapter extends XmlAdapter<MapAdapter.AdaptedMap, Map<String, Integer>> {
+public class MapAdapter extends XmlAdapter<MapAdapter.AdaptedMap, Map<String, Object>> {
 
 
     @Override
-    public AdaptedMap marshal(Map<String, Integer> map) throws Exception {
+    public AdaptedMap marshal(Map<String, Object> map) throws Exception {
         AdaptedMap adaptedMap = new AdaptedMap();
-        for (Entry<String, Integer> entry : map.entrySet()) {
+        for (Entry<String, Object> entry : map.entrySet()) {
             AdaptedEntry adaptedEntry = new AdaptedEntry();
             adaptedEntry.key = entry.getKey();
             adaptedEntry.value = entry.getValue();
@@ -27,21 +27,22 @@ public class MapAdapter extends XmlAdapter<MapAdapter.AdaptedMap, Map<String, In
     @Override
 
 
-    public Map<String, Integer> unmarshal(AdaptedMap adaptedMap) throws Exception {
+    public Map<String, Object> unmarshal(AdaptedMap adaptedMap) throws Exception {
         List<AdaptedEntry> adaptedEntries = adaptedMap.entries;
-        Map<String, Integer> map = new HashMap<String, Integer>(adaptedEntries.size());
+        Map<String, Object> map = new HashMap<>(adaptedEntries.size());
         for (AdaptedEntry adaptedEntry : adaptedEntries) {
             map.put(adaptedEntry.key, adaptedEntry.value);
         }
         return map;
     }
 
+    @XmlAccessorType(XmlAccessType.FIELD)
     public static class AdaptedMap {
 
-
+        @XmlVariableNode("key")
         private List<AdaptedEntry> entries = new ArrayList<>();
 
-        @XmlVariableNode("key")
+
         public List<AdaptedEntry> getEntries() {
             return entries;
         }
@@ -51,17 +52,14 @@ public class MapAdapter extends XmlAdapter<MapAdapter.AdaptedMap, Map<String, In
         }
     }
 
+    @XmlAccessorType(XmlAccessType.FIELD)
     public static class AdaptedEntry {
-
-
-
-        private String key;
-
-
-
-        private  Integer value;
-
         @XmlTransient
+        private String key;
+        @XmlValue
+        private  Object value;
+
+
         public String getKey() {
             return key;
         }
@@ -70,12 +68,11 @@ public class MapAdapter extends XmlAdapter<MapAdapter.AdaptedMap, Map<String, In
             this.key = key;
         }
 
-        @XmlValue
-        public Integer getValue() {
+        public Object getValue() {
             return value;
         }
 
-        public void setValue(Integer value) {
+        public void setValue(Object value) {
             this.value = value;
         }
     }
