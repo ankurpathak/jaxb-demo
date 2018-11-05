@@ -1,13 +1,13 @@
 package com.github.ankurpathak;
 
-import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import java.util.ArrayList;
-import java.util.HashMap;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
-import java.util.Map;
 
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Message {
     private String value;
 
@@ -30,12 +30,12 @@ public class Message {
 
 
     @XmlRootElement
+    @XmlAccessorType(XmlAccessType.FIELD)
     public static class Messages{
 
-
+        @XmlElement(name = "message")
         private List<Message> messages;
 
-        @XmlElement(name = "message")
         public List<Message> getMessages() {
             return messages;
         }

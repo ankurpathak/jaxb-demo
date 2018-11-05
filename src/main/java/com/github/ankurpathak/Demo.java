@@ -1,37 +1,32 @@
 package com.github.ankurpathak;
 
-import java.io.File;
-import java.util.Map;
-import javax.xml.bind.*;
-
-import org.eclipse.persistence.internal.oxm.Root;
+import com.github.ankurpathak.c.Customer;
 import org.eclipse.persistence.jaxb.MarshallerProperties;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 
 public class Demo {
 
     public static void main(String[] args) throws Exception {
+        JAXBContext jc = JAXBContext.newInstance(Customer.class);
+        System.out.println(jc.getClass());
 
-
-        System.out.println(JAXBContext.newInstance(MapObject.class).getClass());
-
-        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-
-        File xml = new File(classLoader.getResource("input.xml").getFile());
-
-        System.out.println("File Found : " + xml.exists());
-        JAXBContext jc = JAXBContext.newInstance(MapObject.class);
-
-        Unmarshaller unmarshaller = jc.createUnmarshaller();
-        //MapObject root = (MapObject) unmarshaller.unmarshal(xml);
-
-        MapObject root = new MapObject();
-        root.setMap(Map.of("a", 1, "b", 2));
+        Customer customer = new Customer();
+        customer.setFirstName("Ankur");
+        customer.setLastName("Pathak");
 
         Marshaller marshaller = jc.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-       // marshaller.setProperty(MarshallerProperties.MEDIA_TYPE, "application/xml");
-       // marshaller.setProperty(MarshallerProperties.JSON_INCLUDE_ROOT, false);
-        marshaller.marshal(root, System.out);
+        marshaller.setProperty(MarshallerProperties.MEDIA_TYPE, "application/xml");
+        marshaller.marshal(customer, System.out);
     }
 
 }
+
+//        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+
+
+//    File xml = new File(classLoader.getResource("input.xml").getFile());
+
+//        System.out.println("File Found : " + xml.exists());
